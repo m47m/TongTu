@@ -1,8 +1,12 @@
 package com.example.tongtu;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.Ringtone;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.service.autofill.RegexValidator;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -14,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.tongtu.base.BaseActivity;
@@ -34,9 +39,47 @@ public class RegisterActivity extends BaseActivity<LoginView, LoginPresenter> im
 
     private boolean username_check;
     private boolean email_check;
-    private boolean password_check;
 
-    private String result_register_check;
+
+    private static final int USERNAME_ERROR_CHECK = 1;
+    private static final int EMAIL_ERROR_CHECK = 2;
+    private static final int REGISTER_RESULT_0 = 3;
+    private static final int REGISTER_RESULT_1 = 4;
+    private static final int REGISTER_RESULT_2 = 5;
+
+    @SuppressLint("HandlerLeak") Handler handler;
+    {
+        handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                Toast toast = Toast.makeText(RegisterActivity.this, "", Toast.LENGTH_SHORT);
+                toast.setGravity(Gravity.TOP, 0, 200);
+                switch (msg.what) {
+                    case USERNAME_ERROR_CHECK:
+                        toast.setText("用户名已被使用请更改");
+                        toast.show();
+                        break;
+                    case EMAIL_ERROR_CHECK:
+                        toast.setText("邮箱已被使用请更改");
+                        toast.show();
+                        break;
+                    case REGISTER_RESULT_0:
+                        toast.setText("注册成功，请前往邮箱进行验证!");
+                        toast.show();
+                        break;
+                    case REGISTER_RESULT_1:
+                        toast.setText("邮件未发送成功，请稍后");
+                        toast.show();
+                        break;
+                    case REGISTER_RESULT_2:
+                        toast.setText("注册失败");
+                        toast.show();
+                        break;
+                }
+            }
+        };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +96,6 @@ public class RegisterActivity extends BaseActivity<LoginView, LoginPresenter> im
 //        edittext
         username_check = false;
         email_check = false;
-        password_check = false;
 
 //      邮箱输入框的实时监听
         email.addTextChangedListener(new TextWatcher() {
@@ -85,12 +127,12 @@ public class RegisterActivity extends BaseActivity<LoginView, LoginPresenter> im
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (username.getText().toString() != "") {
-                        Log.d("1111", username.getText().toString());
+                if (!username.getText().toString().equals("")) {
                         getPresenter().check_username(username.getText().toString());
                     }
             }
@@ -135,7 +177,6 @@ public class RegisterActivity extends BaseActivity<LoginView, LoginPresenter> im
     }
 //  注册按钮
     public void on_register(View v) throws JSONException {
-        Log.d("1111", "on register");
         if(password.getText().toString().equals(checkpassword.getText().toString())){
             if(this.username_check && this.email_check ){
                 getPresenter().register(email.getText().toString(),username.getText().toString(),password.getText().toString());
@@ -157,31 +198,41 @@ public class RegisterActivity extends BaseActivity<LoginView, LoginPresenter> im
     public void on_login(View v) {
         Intent intent_login = new Intent(RegisterActivity.this, LoginActivity.class);
         startActivity(intent_login);
+        finish();
     }
 
     @Override
-    public void onlogin_result(String result) {
+    public void on_login_result(String result,String token,String securityToken,String accessKeySecret ,String accessKeyId,String expiration) {
 
     }
 //  检验用户名
     @Override
-    public void oncheck_username(String result) {
+    public void on_check_username(String result) {
         if(result.equals("1")){
 //            用户名不可用
-            username.setError("用户名已被使用请更改");
             this.username_check = false;
+            Message msg = new Message();
+            msg.what = USERNAME_ERROR_CHECK;
+            handler.sendMessage(msg);
+            username.setError("用户名已被使用请更改");
+
         }else if(result.equals("0")){
 //            用户名可用
             this.username_check = true;
         }
+
     }
 //  检验邮箱
     @Override
-    public void oncheck_email(String result) {
+    public void on_check_email(String result) {
         if(result.equals("1")){
 //            邮箱不可用
-            email.setError("邮箱已被使用请更改");
             this.email_check = false;
+            Message msg = new Message();
+            msg.what=EMAIL_ERROR_CHECK;
+            handler.sendMessage(msg);
+            email.setError("邮箱已被使用请更改");
+
         }else if (result.equals("0")){
 //            邮箱可用
             this.email_check = true;
@@ -189,24 +240,17 @@ public class RegisterActivity extends BaseActivity<LoginView, LoginPresenter> im
     }
 //  注册结果
     @Override
-    public void onregister_result(String result) {
-        Looper.prepare();
-        Toast toast = Toast.makeText(RegisterActivity.this,result,Toast.LENGTH_SHORT);
+    public void on_register_result(String result) {
+
+        Message msg = new Message();
         if(result.equals("0")){
-            toast.setText("注册成功，请前往邮箱进行验证!");
-            toast.setGravity(Gravity.TOP,0, 0);
-            toast.show();
-            Intent intent_login = new Intent(RegisterActivity.this, LoginActivity.class);
-            startActivity(intent_login);
+            msg.what = REGISTER_RESULT_0;
         }else if(result.equals("1")){
-            toast.setText("邮件未发送成功，请稍后");
-            toast.setGravity(Gravity.TOP,0, 0);
-            toast.show();
-        }else{
-            toast.setText("注册失败");
-            toast.setGravity(Gravity.TOP,0, 0);
-            toast.show();
+            msg.what = REGISTER_RESULT_1;
+        }else if(result.equals("2")){
+            msg.what = REGISTER_RESULT_2;
         }
-        Looper.loop();
+        handler.sendMessage(msg);
+
     }
 }

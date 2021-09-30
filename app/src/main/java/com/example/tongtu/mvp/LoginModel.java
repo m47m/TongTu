@@ -25,7 +25,7 @@ public class LoginModel {
     private static OkHttpClient client = new OkHttpClient();
 //  登录
     public void login(String username ,String password,Callback callback) throws JSONException {
-        String URL_login = URL_api +"/user/login";
+        String URL_login = URL_api +"/user/login"+"?username="+username+"&password="+password;
         JSONObject json_data = new JSONObject();
         json_data.put("username",username);
         json_data.put("password",password);

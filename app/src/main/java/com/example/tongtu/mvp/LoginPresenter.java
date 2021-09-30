@@ -1,5 +1,6 @@
 package com.example.tongtu.mvp;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.example.tongtu.base.BasePresenter;
@@ -9,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ResourceBundle;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -17,6 +19,7 @@ import okhttp3.Response;
 public class LoginPresenter extends BasePresenter<LoginView> {
 
     private LoginModel login_model;
+
 
     public LoginPresenter() {
         this.login_model = new LoginModel();
@@ -38,7 +41,7 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     String register_code = jsonObject.getString("code");
                     Log.d("1111",register_code);
                     if(getView() != null) {
-                        getView().onregister_result(register_code);
+                        getView().on_register_result(register_code);
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -65,12 +68,12 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     if (check_email_code.equals("1") ) {
                         Log.d("1111", "failP");
                         if (getView() != null) {
-                            getView().oncheck_email("1");
+                            getView().on_check_email("1");
                         }
                     } else if (check_email_code.equals("0")) {
                         Log.d("1111", "successP");
                         if (getView() != null) {
-                            getView().oncheck_email("0");
+                            getView().on_check_email("0");
                         }
                     } else {
 
@@ -103,12 +106,12 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                     if (check_username_code.equals("1") ) {
                         Log.d("1111", "failP");
                         if (getView() != null) {
-                            getView().oncheck_username("1");
+                            getView().on_check_username("1");
                         }
                     } else if (check_username_code.equals("0")) {
                         Log.d("1111", "successP");
                         if (getView() != null) {
-                            getView().oncheck_username("0");
+                            getView().on_check_username("0");
                         }
                     } else {
 
@@ -136,18 +139,23 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Log.d("1111","success login");
-                JSONObject jsonObject = new JSONObject();
+
                 try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
                     String login_code = jsonObject.getString("code");
-                    Log.d("1111",login_code);
+                    JSONObject json_data = jsonObject.getJSONObject("data");
+                    JSONObject json_sts = json_data.getJSONObject("sts");
+
+                    Log.d("1111",json_data.getString("token"));
+                    Log.d("1111",json_sts.getString("expiration"));
+                    Log.d("1111",username+ password+jsonObject.toString());
                     if(getView() != null){
-                        if(login_code.equals("0")){
-//                            登录成功 存token
-                        }else if(login_code.equals("1")){
-//                            登录失败
-                        }else if(login_code.equals("2")){
-//                            邮箱未验证
-                        }
+                        getView().on_login_result(login_code
+                                ,json_data.getString("token")
+                                ,json_sts.getString("securityToken")
+                                ,json_sts.getString("accessKeySecret")
+                                ,json_sts.getString("accessKeyId")
+                                ,json_sts.getString("expiration"));
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

@@ -1,6 +1,7 @@
 package com.example.tongtu.base;
 
 import android.app.Activity;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,6 +11,9 @@ import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 
+import org.litepal.LitePal;
+import org.litepal.tablemanager.callback.DatabaseListener;
+
 public abstract class BaseActivity<V extends BaseView, P extends BasePresenter<V>> extends Activity {
 
     private P presenter;
@@ -18,6 +22,20 @@ public abstract class BaseActivity<V extends BaseView, P extends BasePresenter<V
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        /*=================litepal数据库=====================*/
+        LitePal.initialize(this);
+        //获取到SQLiteDatabase的实例，创建数据库表
+//        SQLiteDatabase db = LitePal.getDatabase();
+////        监听数据库的创建和升级
+//        LitePal.registerDatabaseListener(new DatabaseListener() {
+//            @Override
+//            public void onCreate() {
+//            }
+//
+//            @Override
+//            public void onUpgrade(int oldVersion, int newVersion) {
+//            }
+//        });
 
         if (this.presenter == null) {
             this.presenter = create_presenter();
