@@ -35,6 +35,7 @@ public class LoginModel {
                 .url(URL_login)
                 .post(body)
                 .build();
+        Log.d("1111",URL_login);
         Call call = client.newCall(request);
         call.enqueue(callback);
     }

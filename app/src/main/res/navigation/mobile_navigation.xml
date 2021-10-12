@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_h">
+
+    <fragment
+        android:id="@+id/navigation_h"
+        android:name="com.example.tongtu.ui.home.HomeFragment"
+        android:label="@string/title_h"
+        tools:layout="@layout/fragment_h" />
+
+    <fragment
+        android:id="@+id/navigation_d"
+        android:name="com.example.tongtu.ui.dashboard.DashboardFragment"
+        android:label="@string/title_d"
+        tools:layout="@layout/fragment_d" />
+
+    <fragment
+        android:id="@+id/navigation_n"
+        android:name="com.example.tongtu.ui.notifications.NotificationsFragment"
+        android:label="@string/title_n"
+        tools:layout="@layout/fragment_n" />
+
+    <fragment
+        android:id="@+id/navigation_p"
+        android:name="com.example.tongtu.ui.person.PersonFragment"
+        android:label="@string/title_p"
+        tools:layout="@layout/fragment_p" />
+
+</navigation>

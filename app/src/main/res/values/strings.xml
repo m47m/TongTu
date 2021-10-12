@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Tongtu</string>
+    <string name="app_name">通途</string>
+    <string name="title_h">最近传输</string>
+    <string name="title_d">传输列表</string>
+    <string name="title_n">设备</string>
+    <string name="title_p">个人中心</string>
 </resources>

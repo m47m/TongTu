@@ -131,16 +131,22 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
 //        this.accessKeySecret = accessKeySecret;
 //        this.accessKeyId = accessKeyId;
 //        this.expiration = expiration;
+        if(result.equals("0")){
+            editor = pref.edit();
+            editor.putString("username",username.getText().toString());
+            editor.putString("token",token);
+            editor.putString("securityToken",securityToken);
+            editor.putString("accessKeySecret",accessKeySecret);
+            editor.putString("accessKeyId",accessKeyId);
+            editor.putString("expiration",expiration);
+            editor.apply();
 
-        editor = pref.edit();
-        editor.putString("token",token);
-        editor.putString("securityToken",securityToken);
-        editor.putString("accessKeySecret",accessKeySecret);
-        editor.putString("accessKeyId",accessKeyId);
-        editor.putString("expiration",expiration);
-        editor.apply();
+            Intent intemt_main = new Intent(LoginActivity.this,MainActivity.class);
+            startActivity(intemt_main);
+            finish();
+        }
 
-        Log.d("1111",pref.getString("expiration","1"));
+
 
     }
 

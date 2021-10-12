@@ -138,24 +138,32 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                Log.d("1111","success login");
+
 
                 try {
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     String login_code = jsonObject.getString("code");
-                    JSONObject json_data = jsonObject.getJSONObject("data");
-                    JSONObject json_sts = json_data.getJSONObject("sts");
+                    Log.d("1111",login_code);
 
-                    Log.d("1111",json_data.getString("token"));
-                    Log.d("1111",json_sts.getString("expiration"));
-                    Log.d("1111",username+ password+jsonObject.toString());
-                    if(getView() != null){
-                        getView().on_login_result(login_code
-                                ,json_data.getString("token")
-                                ,json_sts.getString("securityToken")
-                                ,json_sts.getString("accessKeySecret")
-                                ,json_sts.getString("accessKeyId")
-                                ,json_sts.getString("expiration"));
+                    if(getView() != null) {
+                        if (login_code.equals("0")) {
+                            JSONObject json_data = jsonObject.getJSONObject("data");
+                            JSONObject json_sts = json_data.getJSONObject("sts");
+                            Log.d("1111", json_data.getString("token"));
+                            Log.d("1111", json_sts.getString("expiration"));
+                            Log.d("1111", username + password + jsonObject.toString());
+
+                            getView().on_login_result(login_code
+                                    , json_data.getString("token")
+                                    , json_sts.getString("securityToken")
+                                    , json_sts.getString("accessKeySecret")
+                                    , json_sts.getString("accessKeyId")
+                                    , json_sts.getString("expiration"));
+
+                        } else {
+                            Log.d("1111","setrss");
+                            getView().on_login_result(login_code,"","","","","");
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
