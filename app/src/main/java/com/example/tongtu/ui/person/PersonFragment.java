@@ -184,4 +184,9 @@ public class PersonFragment extends FragmentBase<PersonMsgView, PersonMsgPre>imp
 
     }
 
+    @Override
+    public void loadmore_bin_file_result(String code, List<FileRecycle> fileRecycleList) {
+
+    }
+
 }

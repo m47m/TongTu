@@ -17,4 +17,5 @@ public interface PersonMsgView extends BaseView {
     void get_folder_file_result(List<FolderList> folderLists);
     void loadmore_folder_file_reuslt(String code,List<FileList> fileLists);
     void get_bin_file_result(List<FileRecycle> fileRecycleList);
+    void loadmore_bin_file_result(String code,List<FileRecycle> fileRecycleList);
 }

@@ -68,10 +68,19 @@ public class PersonMsg {
 
     public void get_BinFile(String token,Callback callback){
 
-
-        String URL_get_bin_file = URL_api+"/oss/file/recycle?size=10&page=0";
+        String URL_get_bin_file = URL_api+"/oss/file/recycle?size=15&page=0";
         Request request = new Request.Builder()
                 .url(URL_get_bin_file)
+                .get()
+                .addHeader("token",token)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void LoadMoreBinFile(int page,String token,Callback callback){
+        String URLBinFile = URL_api+"/oss/file/recycle?size=15&page="+String.valueOf(page);
+        Request request = new Request.Builder()
+                .url(URLBinFile)
                 .get()
                 .addHeader("token",token)
                 .build();

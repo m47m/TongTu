@@ -142,6 +142,11 @@ public class FolderActivity extends BaseActivity<PersonMsgView, PersonMsgPre>imp
 
     }
 
+    @Override
+    public void loadmore_bin_file_result(String code, List<FileRecycle> fileRecycleList) {
+
+    }
+
 
     public void back_home(View view) {
         finish();

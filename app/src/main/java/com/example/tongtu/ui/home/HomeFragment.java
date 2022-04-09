@@ -171,6 +171,10 @@ public class HomeFragment extends FragmentBase<PersonMsgView, PersonMsgPre>imple
 
     }
 
+    @Override
+    public void loadmore_bin_file_result(String code, List<FileRecycle> fileRecycleList) {
+
+    }
 
 
 //

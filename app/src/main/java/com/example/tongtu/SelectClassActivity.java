@@ -175,4 +175,9 @@ public class SelectClassActivity extends BaseActivity<PersonMsgView, PersonMsgPr
 
     }
 
+    @Override
+    public void loadmore_bin_file_result(String code, List<FileRecycle> fileRecycleList) {
+
+    }
+
 }

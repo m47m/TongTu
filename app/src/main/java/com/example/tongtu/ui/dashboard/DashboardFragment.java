@@ -38,6 +38,7 @@ import com.example.tongtu.filerecycle.FileRecycleAdapter;
 import com.example.tongtu.folderlist.FolderList;
 import com.example.tongtu.mvp.PersonMsgPre;
 import com.example.tongtu.mvp.PersonMsgView;
+import com.example.tongtu.utils.EndlessRecyclerOnScrollListener;
 import com.example.tongtu.utils.LoadMoreAdapter;
 import com.example.tongtu.utils.MyItemTouchHelperCallback;
 
@@ -91,6 +92,7 @@ public class DashboardFragment extends FragmentBase<PersonMsgView, PersonMsgPre>
                         break;
                     case LOADEND:
                         EndofPage = true;
+                        Log.d("testDash","loadend");
                         loadMoreAdapter.setLoadState(loadMoreAdapter.LOADING_END);
                     default:
                         break;
@@ -122,6 +124,23 @@ public class DashboardFragment extends FragmentBase<PersonMsgView, PersonMsgPre>
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new MyItemTouchHelperCallback(adapter));
         itemTouchHelper.attachToRecyclerView(recyclerView);
 
+        recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
+            @Override
+            public void onLoadMore() {
+                loadMoreAdapter.setLoadState(loadMoreAdapter.LOADING);
+//                if(file_list_list.size() < 15){
+                if(!EndofPage){
+                    LoadPage++;
+                    getPresenter().LoadMoreBinFile(LoadPage,token);
+                    loadMoreAdapter.setLoadState(loadMoreAdapter.LOADING_COMPLETE);
+                    Log.d("testDash" ,"loadmore"+String.valueOf(LoadPage));
+                }
+                else{
+                    loadMoreAdapter.setLoadState(loadMoreAdapter.LOADING_END);
+                }
+            }
+        });
+
 
         pref = view.getContext().getSharedPreferences("login_message",MODE_PRIVATE);
         token = pref.getString("token","");
@@ -143,7 +162,6 @@ public class DashboardFragment extends FragmentBase<PersonMsgView, PersonMsgPre>
     }
 
     private void init_file(){
-
         if(getPresenter() != null){
             Log.d("testDash","init");
             getPresenter().get_BinFile(token);
@@ -181,5 +199,18 @@ public class DashboardFragment extends FragmentBase<PersonMsgView, PersonMsgPre>
         message.what = LOADSTART;
         message.obj = file_recycle_list;
         handler.sendMessage(message);
+    }
+
+    @Override
+    public void loadmore_bin_file_result(String code, List<FileRecycle> fileRecycleList) {
+        Message message = new Message();
+        if(code.equals("1")){
+            message.what = LOADEND;
+            handler.sendMessage(message);
+        }else if(code.equals("0")){
+            message.what = LOADMORE;
+            message.obj = fileRecycleList;
+            handler.sendMessage(message);
+        }
     }
 }

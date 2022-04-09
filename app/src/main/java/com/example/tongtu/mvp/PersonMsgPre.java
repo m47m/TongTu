@@ -14,6 +14,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -202,19 +203,19 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
                     if(code.equals("0")){
                         List<FileRecycle> fileRecycles = new ArrayList<>();
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
-                    Log.d("testDash",jsonArray.toString());
-                    for(int i =0;i<jsonArray.length();i++){
-                        fileRecycles.add(new FileRecycle(
+                        Log.d("testDash",jsonArray.toString());
+                        for(int i =0;i<jsonArray.length();i++){
+                            fileRecycles.add(new FileRecycle(
                                 jsonArray.getJSONObject(i).getString("name"),
                                 jsonArray.getJSONObject(i).getString("fileType"),
                                 jsonArray.getJSONObject(i).getString("size"),
                                 R.drawable.document_type_new
-                        ));
-                    }
+                         ));
+                      }
 
                     if(getView() != null){
-                        getView().get_bin_file_result(fileRecycles);
-                    }
+                            getView().get_bin_file_result(fileRecycles);
+                         }
                     }
 
 
@@ -225,4 +226,53 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
             }
         });
     }
+
+    public void LoadMoreBinFile(int page,String token){
+        this.personMsg.LoadMoreBinFile(page, token, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(response.body().string());
+                    String code = jsonObject.getString("code");
+                    List<FileRecycle> fileRecycles = new ArrayList<>();
+                    if(code.equals("0")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        Log.d("testDash", jsonArray.toString());
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            fileRecycles.add(new FileRecycle(
+                                    jsonArray.getJSONObject(i).getString("name"),
+                                    jsonArray.getJSONObject(i).getString("fileType"),
+                                    jsonArray.getJSONObject(i).getString("size"),
+                                    R.drawable.document_type_new
+                            ));
+                        }
+
+                        if(getView() != null){
+                            getView().loadmore_bin_file_result("0",fileRecycles);
+                        }
+                    }else if(code.equals("1")){
+                        if(getView() != null){
+                            getView().loadmore_bin_file_result("1", fileRecycles);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+
+
+            }
+        });
+    }
 }
+

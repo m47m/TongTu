@@ -174,11 +174,9 @@ public class NotificationsFragment extends FragmentBase<PersonMsgView, PersonMsg
     public void loadmore_folder_file_reuslt(String code,List<FileList> fileLists) {
         Message message = new Message();
         if(code.equals("1")){
-
             message.what = LOADEND;
             handler.sendMessage(message);
         }else if(code.equals("0")){
-
             message.what = LOADMORE;
             message.obj = fileLists;
             handler.sendMessage(message);
@@ -187,6 +185,11 @@ public class NotificationsFragment extends FragmentBase<PersonMsgView, PersonMsg
 
     @Override
     public void get_bin_file_result(List<FileRecycle> fileRecycleList) {
+
+    }
+
+    @Override
+    public void loadmore_bin_file_result(String code, List<FileRecycle> fileRecycleList) {
 
     }
 }
