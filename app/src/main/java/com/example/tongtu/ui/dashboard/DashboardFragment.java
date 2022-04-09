@@ -197,12 +197,15 @@ public class DashboardFragment extends FragmentBase<PersonMsgView, PersonMsgPre>
     public void get_bin_file_result(List<FileRecycle> fileRecycleList) {
         Message message = new Message();
         message.what = LOADSTART;
-        message.obj = file_recycle_list;
+        Log.d("testDash two",String.valueOf(fileRecycleList.size()));
+        message.obj = fileRecycleList;
         handler.sendMessage(message);
     }
 
+
     @Override
     public void loadmore_bin_file_result(String code, List<FileRecycle> fileRecycleList) {
+
         Message message = new Message();
         if(code.equals("1")){
             message.what = LOADEND;

@@ -200,6 +200,7 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     Log.d("testDash",jsonObject.getString("code"));
                     String code = jsonObject.getString("code");
+
                     if(code.equals("0")){
                         List<FileRecycle> fileRecycles = new ArrayList<>();
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
@@ -214,6 +215,7 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
                       }
 
                     if(getView() != null){
+                        Log.d("testDash one",String.valueOf(fileRecycles.size()));
                             getView().get_bin_file_result(fileRecycles);
                          }
                     }

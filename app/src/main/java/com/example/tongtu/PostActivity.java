@@ -51,11 +51,13 @@ import com.example.tongtu.utils.FileTypeutils;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigInteger;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.HashMap;
 
 
@@ -214,8 +216,9 @@ public class PostActivity extends BaseActivity<FileMsgView, FileMsgPre> implemen
             get_name_from_uir(uri);
 
             File file =  uriToFileApiQ(uri,this);
-            md5 = getFileMD5(file);
-
+            //md5 = getFileMD5(file);
+            Log.d("testPostActivity old",getFileMD5(file));
+            md5 = fileToMD5(file.getPath());
 //            Log.d("testPostActivity MD5:",getFileMD5(file));
 //            Log.d("testPostActivity name:",this.name);
 //            Log.d("testPostActivity size:",String.valueOf(this.size));
@@ -224,9 +227,10 @@ public class PostActivity extends BaseActivity<FileMsgView, FileMsgPre> implemen
 
             //文件检测
             if(getPresenter() != null){
+                Log.d("testPostActivity",file.getAbsolutePath());
+                Log.d("testPostActivity",md5);
                 getPresenter().toFileTest(token,String.valueOf(size),md5,String.valueOf(device));
             }
-
 
 
             //更新post中的uri
@@ -260,6 +264,39 @@ public class PostActivity extends BaseActivity<FileMsgView, FileMsgPre> implemen
         }
 
 
+    }
+
+    public static String fileToMD5(String filePath) {
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(filePath);
+            byte[] buffer = new byte[1024];
+            MessageDigest digest = MessageDigest.getInstance("MD5");
+            int numRead = 0;
+            while (numRead != -1) {
+                numRead = inputStream.read(buffer);
+                if (numRead > 0)
+                    digest.update(buffer, 0, numRead);
+            }
+            byte [] md5Bytes = digest.digest();
+            return convertHashToString(md5Bytes);
+        } catch (Exception e) {
+            return null;
+        } finally {
+            if (inputStream != null) {
+                try {
+                    inputStream.close();
+                } catch (Exception e) { }
+            }
+        }
+    }
+
+    private static String convertHashToString(byte[] md5Bytes) {
+        String returnVal = "";
+        for (int i = 0; i < md5Bytes.length; i++) {
+            returnVal += Integer.toString(( md5Bytes[i] & 0xff ) + 0x100, 16).substring(1);
+        }
+        return returnVal.toUpperCase();
     }
 
     //返回上一级
@@ -300,7 +337,6 @@ public class PostActivity extends BaseActivity<FileMsgView, FileMsgPre> implemen
         if(path_final.equals("0")){
             Toast.makeText(this,"请选择文件",Toast.LENGTH_SHORT).show();
         }else{
-
             String endpoint = "http://oss-cn-beijing.aliyuncs.com";
             String stsServer = O_Url+"://api.tongtu.xyz"+"/oss/sts/"+token;
             Log.d("PutObject",path_final);
