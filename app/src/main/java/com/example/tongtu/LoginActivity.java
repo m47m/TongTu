@@ -31,6 +31,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.tongtu.base.BaseActivity;
 import com.example.tongtu.mvp.LoginPresenter;
 import com.example.tongtu.mvp.LoginView;
+import com.example.tongtu.utils.DeviceUuidFactory;
 
 import org.json.JSONException;
 import org.litepal.annotation.Column;
@@ -47,8 +48,10 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     private static final int LOGIN_RESULT_1 = 1;
     private static final int LOGIN_RESULT_2 = 2;
     private static final int LOGIN_RESULT_3 = 3;
+    private static final int LOGIN_RESULT_4 = 4;
     private SharedPreferences pref;
     private SharedPreferences.Editor editor;
+    private DeviceUuidFactory deviceUuidFactory;
 
     @SuppressLint("HandlerLeak")
     Handler handler;
@@ -77,6 +80,11 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
                         toast.setText("未连接到数据库");
                         toast.show();
                         break;
+                    case LOGIN_RESULT_4:
+                        toast.setText("登录成功");
+                        toast.show();
+                        break;
+
                 }
             }
         };
@@ -93,20 +101,28 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
 
-        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        //pref = PreferenceManager.getDefaultSharedPreferences(this);
 
+        pref = this.getSharedPreferences("login_message",MODE_PRIVATE);
 
-
+        deviceUuidFactory = new DeviceUuidFactory(this);
     }
 
     public void on_login(View v) throws JSONException {
-        getPresenter().login(username.getText().toString(), password.getText().toString());
+        getPresenter().login(username.getText().toString(), password.getText().toString(),deviceUuidFactory.getDeviceUuid().toString());
     }
 
     public void on_register(View v) {
         Intent intent_register = new Intent(LoginActivity.this, RegisterActivity.class);
-        startActivity(intent_register);
-        finish();
+        startActivityForResult(intent_register,2);
+    }
+
+    public void on_add_divice(String token) throws JSONException {
+
+        String name = android.os.Build.BRAND+" "+android.os.Build.MODEL;
+        Log.d("testLoginActivity add uuid" ,deviceUuidFactory.getDeviceUuid().toString());
+        Log.d("testLoginActivity add name",name);
+        getPresenter().add_divice(token,name,deviceUuidFactory.getDeviceUuid().toString());
     }
 
 
@@ -114,32 +130,39 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     public LoginPresenter create_presenter() {
         return new LoginPresenter();
     }
-
     @Override
     public LoginView create_view() {
         return this;
     }
-
     @Override
-    public void on_login_result(String result ,String token,String securityToken,String accessKeySecret ,String accessKeyId,String expiration) {
+    public void on_login_result(String result ,String token,String securityToken,String accessKeySecret ,String accessKeyId,String expiration) throws JSONException {
         Message msg = new Message();
         msg.what = Integer.parseInt(result);
         handler.sendMessage(msg);
-
 //        this.token = token;
 //        this.securityToken = securityToken;
 //        this.accessKeySecret = accessKeySecret;
 //        this.accessKeyId = accessKeyId;
 //        this.expiration = expiration;
-        if(result.equals("0")){
+        if(result.equals("0") || result.equals("4")){
             editor = pref.edit();
+            editor.putBoolean("islogin",true);
             editor.putString("username",username.getText().toString());
             editor.putString("token",token);
-            editor.putString("securityToken",securityToken);
-            editor.putString("accessKeySecret",accessKeySecret);
-            editor.putString("accessKeyId",accessKeyId);
-            editor.putString("expiration",expiration);
+
+
+            Log.d("testLoginActivity token",token);
             editor.apply();
+            editor.clear();
+
+
+            Log.d("testLoginActivity add uuid" ,deviceUuidFactory.getDeviceUuid().toString());
+            if(result.equals("4")){
+                Log.d("testLoginActivity add","true");
+                this.on_add_divice(token);
+            }else {
+                Log.d("testLoginActivity add","false");
+            }
 
             Intent intemt_main = new Intent(LoginActivity.this,MainActivity.class);
             startActivity(intemt_main);
@@ -148,6 +171,15 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
 
 
 
+    }
+    @Override
+    public void on_add_result(String code,String data) {
+        if(code.equals("0")){
+            editor = pref.edit();
+            editor.putString("DeviceID",data);
+            editor.apply();
+            editor.clear();
+        }
     }
 
 
@@ -165,5 +197,6 @@ public class LoginActivity extends BaseActivity<LoginView, LoginPresenter> imple
     public void on_register_result(String result) {
 
     }
+
 
 }

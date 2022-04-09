@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.tongtu">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.READ_PRIVILEGED_PHONE_STATE"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
 
     <application
         android:allowBackup="true"
@@ -12,9 +20,41 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tongtu"
         android:usesCleartextTraffic="true">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".FolderActivity"></activity>
+        <activity android:name=".SettingActivity" />
+        <activity android:name=".FileDownload" />
+        <activity android:name=".SelectClassActivity" />
+        <activity android:name=".ChangeDeviceActivity" />
+        <activity android:name=".MyDeviceActivity" />
+        <activity android:name=".SearchActivity" /> <!-- 添加文件打开方式，可在第三方应用中将你的app加入打开方式列表 -->
+        <activity
+            android:name=".PostActivity"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data
+                    android:mimeType="*/*"
+                    android:scheme="content" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <data android:mimeType="*/*" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".RegisterActivity" />
-        <activity android:name=".LoginActivity">
+        <activity android:name=".LoginActivity" />
+        <activity
+            android:name=".WelcomeActivity"
+            android:theme="@style/Theme.Tongtu.FullScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

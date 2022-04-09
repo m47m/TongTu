@@ -24,7 +24,7 @@ public class LoginModel {
     private static MediaType JSON = MediaType.get("application/json; charset=utf-8");
     private static OkHttpClient client = new OkHttpClient();
 //  登录
-    public void login(String username ,String password,Callback callback) throws JSONException {
+    public void login(String username ,String password, String uuid ,Callback callback) throws JSONException {
         String URL_login = URL_api +"/user/login"+"?username="+username+"&password="+password;
         JSONObject json_data = new JSONObject();
         json_data.put("username",username);
@@ -34,6 +34,7 @@ public class LoginModel {
         Request request = new Request.Builder()
                 .url(URL_login)
                 .post(body)
+                .addHeader("uuid",uuid)
                 .build();
         Log.d("1111",URL_login);
         Call call = client.newCall(request);
@@ -81,5 +82,20 @@ public class LoginModel {
         call.enqueue(callback);
 
     }
-
+    //新增设备
+    public void add_divice(String token,String name,String uuid,Callback callback)throws JSONException{
+        String URL_add_divice = URL_api+"/user/device/add";
+        JSONObject json_data = new JSONObject();
+        json_data.put("uuid",uuid);
+        json_data.put("name",name);
+        json_data.put("type","phone");
+        RequestBody body = RequestBody.create(json_data.toString(),JSON);
+        Request request = new Request.Builder()
+                .url(URL_add_divice)
+                .post(body)
+                .addHeader("token",token)
+                .build();
+        Call call = client.newCall(request);
+        call.enqueue(callback);
+    }
 }

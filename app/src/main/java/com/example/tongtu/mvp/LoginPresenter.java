@@ -20,7 +20,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     private LoginModel login_model;
 
-
     public LoginPresenter() {
         this.login_model = new LoginModel();
     }
@@ -31,7 +30,6 @@ public class LoginPresenter extends BasePresenter<LoginView> {
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
                 Log.d("1111", "fail register" + email);
             }
-
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
                 Log.d("1111", "success register" + email);
@@ -54,24 +52,20 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         this.login_model.check_email(email, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.d("1111", "faildddM" + email);
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                Log.d("1111", "successM" + email);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     String check_email_code = jsonObject.getString("code");
-                    Log.d("1111", check_email_code);
+
                     if (check_email_code.equals("1") ) {
-                        Log.d("1111", "failP");
                         if (getView() != null) {
                             getView().on_check_email("1");
                         }
                     } else if (check_email_code.equals("0")) {
-                        Log.d("1111", "successP");
                         if (getView() != null) {
                             getView().on_check_email("0");
                         }
@@ -91,25 +85,23 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         this.login_model.check_username(username, new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.d("1111", "faildddM" + username);
+
             }
 
             @Override
             public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-
-                Log.d("1111", "successM" + username);
 
                 try {
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     String check_username_code = jsonObject.getString("code");
                     Log.d("1111", check_username_code);
                     if (check_username_code.equals("1") ) {
-                        Log.d("1111", "failP");
+
                         if (getView() != null) {
                             getView().on_check_username("1");
                         }
                     } else if (check_username_code.equals("0")) {
-                        Log.d("1111", "successP");
+
                         if (getView() != null) {
                             getView().on_check_username("0");
                         }
@@ -128,12 +120,11 @@ public class LoginPresenter extends BasePresenter<LoginView> {
 
     }
 //  登录
-    public void login(String username, String password) throws JSONException {
+    public void login(String username, String password ,String uuid) throws JSONException {
 
-        this.login_model.login(username, password, new Callback() {
+        this.login_model.login(username, password, uuid,new Callback() {
             @Override
             public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                Log.d("1111","fail login");
             }
 
             @Override
@@ -143,25 +134,20 @@ public class LoginPresenter extends BasePresenter<LoginView> {
                 try {
                     JSONObject jsonObject = new JSONObject(response.body().string());
                     String login_code = jsonObject.getString("code");
-                    Log.d("1111",login_code);
+                    Log.d("login_code",login_code);
 
                     if(getView() != null) {
-                        if (login_code.equals("0")) {
+                        if (login_code.equals("0")|| login_code.equals("4")) {
                             JSONObject json_data = jsonObject.getJSONObject("data");
-                            JSONObject json_sts = json_data.getJSONObject("sts");
-                            Log.d("1111", json_data.getString("token"));
-                            Log.d("1111", json_sts.getString("expiration"));
-                            Log.d("1111", username + password + jsonObject.toString());
-
+                            Log.d("login_code",json_data.getString("token"));
                             getView().on_login_result(login_code
                                     , json_data.getString("token")
-                                    , json_sts.getString("securityToken")
-                                    , json_sts.getString("accessKeySecret")
-                                    , json_sts.getString("accessKeyId")
-                                    , json_sts.getString("expiration"));
+                                    , "securityToken"
+                                    , "accessKeySecret"
+                                    , "accessKeyId"
+                                    , "expiration");
 
                         } else {
-                            Log.d("1111","setrss");
                             getView().on_login_result(login_code,"","","","","");
                         }
                     }
@@ -173,5 +159,26 @@ public class LoginPresenter extends BasePresenter<LoginView> {
         });
 
     }
+//  新增设备
+    public void add_divice(String token,String name,String uuid) throws JSONException {
+        this.login_model.add_divice(token, name, uuid, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
 
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                try {
+                    JSONObject jsonObject = new JSONObject(response.body().string());
+                    if(getView() != null){
+                        Log.d("testLoginActivity add UUID",jsonObject.getString("data"));
+                        getView().on_add_result(jsonObject.getString("code"),jsonObject.getString("data"));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
 }

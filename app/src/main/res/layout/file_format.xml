@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.Group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/file_format_left"
+        app:constraint_referenced_ids="card_file_message_left,img_device_left"
+        />
+    <androidx.constraintlayout.widget.Group
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id = "@+id/file_format_right"
+        app:constraint_referenced_ids="img_device_right,card_file_message_right"/>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:text="10-30 23:31"
+
+        android:id="@+id/text_file_time"
+        tools:ignore="MissingConstraints" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:id="@+id/img_device_left"
+        android:src="@drawable/device_com"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="10dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="38dp" />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_file_message_left"
+        android:layout_width="260dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="2dp"
+        app:layout_constraintLeft_toRightOf="@id/img_device_left"
+        app:layout_constraintTop_toBottomOf="@id/text_file_time"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="60dp"
+                android:layout_height="70dp"
+                android:id="@+id/img_file_class_left"
+                android:src="@drawable/document_type_mp3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginStart="10dp"
+                tools:ignore="MissingConstraints"
+               />
+
+           <androidx.appcompat.widget.AppCompatTextView
+               android:layout_width="180dp"
+               android:layout_height="wrap_content"
+               android:textColor="@color/file_format_text_color"
+               android:id="@+id/text_file_name_left"
+               app:layout_constraintTop_toTopOf="parent"
+               app:layout_constraintRight_toRightOf="@id/card_file_message_left"
+               app:layout_constraintLeft_toRightOf="@id/img_file_class_left"
+               android:layout_marginTop="18dp"
+               android:layout_marginEnd="10dp"
+               android:layout_marginStart="8dp"
+               android:text="这是一段音乐.mp4"
+               android:textSize="15sp"
+               tools:ignore="MissingConstraints,NotSibling" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/file_format_text_color"
+                android:id="@+id/text_file_size_cloud_left"
+                android:text="120MB | 已上传到云端"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:textSize="12sp"
+                app:layout_constraintTop_toBottomOf="@id/text_file_name_left"
+                app:layout_constraintLeft_toRightOf="@id/img_file_class_left"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- -->
+
+
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="45dp"
+        android:id="@+id/img_device_right"
+        android:src="@drawable/device_phone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="10dp"
+        tools:ignore="MissingConstraints"
+         />
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_file_message_right"
+        android:layout_width="260dp"
+        android:layout_height="85dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="10dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="2dp"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        app:layout_constraintRight_toLeftOf="@id/img_device_right"
+        app:layout_constraintTop_toBottomOf="@id/text_file_time">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:background="@color/file_format_card_color"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="60dp"
+                android:layout_height="70dp"
+                android:id="@+id/img_file_class_right"
+                android:src="@drawable/document_type_mp3"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:layout_marginStart="10dp"
+                tools:ignore="MissingConstraints"
+               />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/text_file_name_right"
+                android:layout_width="180dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="10dp"
+                android:text="宫sir美妙的歌声.mp4"
+                android:textColor="@color/file_format_text_color"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintLeft_toRightOf="@id/img_file_class_right"
+                app:layout_constraintRight_toRightOf="@id/card_file_message_right"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints,NotSibling" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:textColor="@color/file_format_text_color"
+                android:id="@+id/text_file_size_cloud_right"
+                android:text="120MB | 已上传到云端"
+                android:layout_marginStart="8dp"
+                android:textSize="10sp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@id/text_file_name_right"
+                app:layout_constraintLeft_toRightOf="@id/img_file_class_right"
+                tools:ignore="MissingConstraints" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/card_file_message_left"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

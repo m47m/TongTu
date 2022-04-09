@@ -4,13 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp">
+    android:layout_gravity="center_vertical"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:clickable="true"
+    android:foreground="?attr/selectableItemBackground"
+    android:focusable="true">
 
     <ImageView
         android:id="@+id/file_image"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:background="@drawable/item_selecter"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         app:layout_constraintRight_toLeftOf="@id/file_name"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,16 +24,40 @@
 
     <TextView
         android:id="@+id/file_name"
-        android:background="@drawable/item_selecter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="6dp"
         android:gravity="center_vertical"
-        android:layout_marginLeft="15dp"
+        android:text="TextView"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@id/file_device_number"
         app:layout_constraintLeft_toRightOf="@id/file_image"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/file_time"
         android:text="TextView"
-        android:textSize="20sp"
+        android:textSize="13sp"
+        android:layout_marginRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/file_name"
+        app:layout_constraintBaseline_toBaselineOf="@id/file_name"
+        tools:ignore="MissingConstraints" />
+
+    <TextView
+        android:id="@+id/file_device_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:gravity="center_vertical"
+        android:text="TextView"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/file_image"
+        app:layout_constraintTop_toBottomOf="@id/file_name"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

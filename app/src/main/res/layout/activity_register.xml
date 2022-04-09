@@ -5,7 +5,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     >
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:contentInsetStartWithNavigation="0dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        tools:ignore="MissingConstraints" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:id="@+id/back_img"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintLeft_toLeftOf="parent"
+                android:paddingRight="5dp"
+                android:onClick="back_login"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.appcompat.widget.Toolbar>
 
     <TextView
         android:id="@+id/tongtu"
@@ -41,6 +74,8 @@
         android:paddingTop="6dp"
         android:paddingLeft="6dp"
         android:hint="请输入邮箱"
+        android:textColor="@color/black"
+        android:textColorHint="@color/edit_texthint_color"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:singleLine="true"
@@ -57,6 +92,8 @@
         android:id="@+id/username"
         android:background="@drawable/edittext_border"
         android:hint="请输入用户名"
+        android:textColor="@color/black"
+        android:textColorHint="@color/edit_texthint_color"
         android:paddingTop="6dp"
         android:paddingLeft="6dp"
         android:layout_width="0dp"
@@ -74,6 +111,8 @@
         android:id="@+id/password"
         android:background="@drawable/edittext_border"
         android:hint="请输入密码"
+        android:textColor="@color/black"
+        android:textColorHint="@color/edit_texthint_color"
         android:inputType="textPassword"
         android:paddingTop="6dp"
         android:paddingLeft="6dp"
@@ -91,7 +130,9 @@
     <EditText
         android:id="@+id/checkpassword"
         android:background="@drawable/edittext_border"
+        android:textColor="@color/black"
         android:hint="确认密码"
+        android:textColorHint="@color/edit_texthint_color"
         android:inputType="textPassword"
         android:paddingTop="6dp"
         android:paddingLeft="6dp"
@@ -106,34 +147,18 @@
         android:layout_marginTop="20dp"
         android:textSize="20sp"/>
 
-    <Button
-        android:id="@+id/login_b"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/check_border"
-        app:layout_constraintWidth_percent="0.3"
-        app:layout_constraintDimensionRatio="2:1"
-        app:layout_constraintTop_toBottomOf="@id/checkpassword"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toLeftOf="@id/register_b"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintVertical_bias="0.4"
-        android:text="登录"
-        android:textSize="18sp"
-        android:textColor="@color/white"
-        android:onClick="on_login"
-        />
+
 
     <Button
         android:id="@+id/register_b"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/check_border"
-        app:layout_constraintWidth_percent="0.3"
-        app:layout_constraintDimensionRatio="2:1"
+        android:background="@drawable/btn_blue"
+        app:layout_constraintWidth_percent="0.5"
+        app:layout_constraintDimensionRatio="3:1"
         app:layout_constraintTop_toBottomOf="@id/checkpassword"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@id/login_b"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintVertical_bias="0.4"
         android:text="注册"

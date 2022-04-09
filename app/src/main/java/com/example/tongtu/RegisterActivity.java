@@ -194,6 +194,15 @@ public class RegisterActivity extends BaseActivity<LoginView, LoginPresenter> im
         }
 
     }
+
+    public void back_login(View v){
+       Intent Intent_login = new Intent();
+
+       setResult(RESULT_OK,Intent_login);
+       finish();
+
+    }
+
 //  登录按钮
     public void on_login(View v) {
         Intent intent_login = new Intent(RegisterActivity.this, LoginActivity.class);
@@ -253,4 +262,10 @@ public class RegisterActivity extends BaseActivity<LoginView, LoginPresenter> im
         handler.sendMessage(msg);
 
     }
+
+    @Override
+    public void on_add_result(String code, String data) {
+
+    }
+
 }
