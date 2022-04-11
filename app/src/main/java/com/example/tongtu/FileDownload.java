@@ -1,14 +1,21 @@
 package com.example.tongtu;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.alibaba.sdk.android.oss.ClientConfiguration;
 import com.alibaba.sdk.android.oss.ClientException;
@@ -24,11 +31,14 @@ import com.alibaba.sdk.android.oss.common.utils.BinaryUtil;
 import com.alibaba.sdk.android.oss.internal.OSSAsyncTask;
 import com.alibaba.sdk.android.oss.model.GetObjectRequest;
 import com.alibaba.sdk.android.oss.model.GetObjectResult;
+import com.example.tongtu.base.BaseActivity;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+
+import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class FileDownload extends AppCompatActivity {
     private Intent intent;
@@ -45,8 +55,28 @@ public class FileDownload extends AppCompatActivity {
     private static String Url = "http://api.tongtu.xyz";
     private static String CallbackUrl = "http://api.tongtu.xyz/oss/callback";
 
+    private static final int DOWNLOAD_SUCCESS = 1;
+    private static final int DOWNLOAD_FAIL =2;
 
     public FileGetCallback getCallback;
+
+    @SuppressLint("HandlerLeak")
+    Handler handler;
+    {
+        handler = new Handler(Looper.getMainLooper()) {
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+               switch (msg.what){
+                   case DOWNLOAD_SUCCESS:
+                       Toast.makeText(FileDownload.this,"已存储至系统DownLoad目录下",Toast.LENGTH_SHORT).show();
+                       break;
+                   case DOWNLOAD_FAIL:
+                       Toast.makeText(FileDownload.this,"下载失败，请重新尝试",Toast.LENGTH_SHORT).show();
+                       break;
+               }
+            }
+        };
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,7 +149,11 @@ public class FileDownload extends AppCompatActivity {
             Log.v("AvceService","onSuccess");
             this.request = request;
             this.result = result;
-            writeFile("test");
+            writeFile();
+
+
+
+
         }
 
         @Override
@@ -128,11 +162,15 @@ public class FileDownload extends AppCompatActivity {
             this.request = request;
             this.clientException = clientExcepion;
             this.serviceException = serviceException;
+
+            Message message = new Message();
+            message.what = DOWNLOAD_FAIL;
+            handler.sendMessage(message);
         }
     }
 
 
-    public void writeFile(String name) {
+    public void writeFile() {
         String srcFileBase64Md5 = null;
         String filePath ="/"+"test"+"/"+this.file_name;
 //        try {
@@ -162,7 +200,9 @@ public class FileDownload extends AppCompatActivity {
         File file=null;
         try {
             Log.i("testFileDownload","new file " );
-            file= new File(this.getExternalCacheDir(),this.file_name);
+           // file= new File(this.getExternalCacheDir(),this.file_name);
+           file = new File(getDownDirs(),this.file_name);
+
             if (!file.exists()) {
                 file.createNewFile();
             }
@@ -171,10 +211,17 @@ public class FileDownload extends AppCompatActivity {
             Log.i("testFileDownload","downloadFile -- "+file.getAbsolutePath() );
             fout.write(buffer);
             fout.close();
+
+            Message message = new Message();
+            message.what = DOWNLOAD_SUCCESS;
+            handler.sendMessage(message);
+
         } catch (Exception e) {
             OSSLog.logInfo(e.toString());
             Log.i("FileDownload",e.toString() );
-
+            Message message = new Message();
+            message.what = DOWNLOAD_FAIL;
+            handler.sendMessage(message);
         }
 //        String downloadFileBase64Md5 = null;
 //        try {
@@ -183,6 +230,15 @@ public class FileDownload extends AppCompatActivity {
 //            e.printStackTrace();
 //        }
        // assertEquals(srcFileBase64Md5, downloadFileBase64Md5);
+    }
+
+    //获得系统Download目录
+    public static File getDownDirs(){
+        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+        return dir;
     }
 
 }

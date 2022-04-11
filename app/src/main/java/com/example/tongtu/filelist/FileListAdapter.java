@@ -87,7 +87,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
         holder.card_file_message_right.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(holder.itemView.getContext(),"点击了右card", Toast.LENGTH_SHORT).show();
+              //  Toast.makeText(holder.itemView.getContext(),"点击了右card", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, FileDownload.class);
                 intent.putExtra("file_class",file_list_list.get(holder.getAdapterPosition()).getFile_class());
                 intent.putExtra("file_name",file_list_list.get(holder.getAdapterPosition()).getFile_name());
@@ -98,7 +98,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
         holder.card_file_message_left.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(holder.itemView.getContext(),"点击了左card", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(holder.itemView.getContext(),"点击了左card", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, FileDownload.class);
                 intent.putExtra("file_class",file_list_list.get(holder.getAdapterPosition()).getFile_class());
                 intent.putExtra("file_name",file_list_list.get(holder.getAdapterPosition()).getFile_name());

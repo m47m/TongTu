@@ -108,7 +108,7 @@ public class PostActivity extends BaseActivity<FileMsgView, FileMsgPre> implemen
                     pb_post_progress.setProgress(mProgress);
                 }else if(msg.what == 0x110)
                 {
-                    Toast.makeText(PostActivity.this,"加载完成",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostActivity.this,"上传成功",Toast.LENGTH_SHORT).show();
                     pb_post_progress.setVisibility(View.GONE);
                 }else if(msg.what == 0){
                     Toast.makeText(PostActivity.this,"文件可上传",Toast.LENGTH_SHORT).show();
