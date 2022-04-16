@@ -357,8 +357,9 @@ public class PostActivity extends BaseActivity<FileMsgView, FileMsgPre> implemen
             // Object完整路径（例如exampledir/exampleobject.txt）
             // 和本地文件完整路径（例如/storage/emulated/0/oss/examplefile.txt）。
             // Object完整路径中不能包含Bucket名称。
-            PutObjectRequest put = new PutObjectRequest("examplesbucket", object_key, uri_final);
+            PutObjectRequest put = new PutObjectRequest("examplesbucket", folder+"/"+object_key, uri_final);
 
+            Log.d("testPost",folder+"/"+object_key);
             put.setCallbackParam(new HashMap<String, String>(){
                 {
                     put("callbackUrl", CallbackUrl);

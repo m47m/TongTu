@@ -118,7 +118,7 @@ public class FileDownload extends AppCompatActivity {
 
         OSS mClient = new OSSClient(getApplicationContext(), endpoint, credentialProvider);
 
-        GetObjectRequest get = new GetObjectRequest("examplesbucket", this.file_name);
+        GetObjectRequest get = new GetObjectRequest("examplesbucket", "only/"+this.file_name);
 
         getCallback = new FileGetCallback();
 

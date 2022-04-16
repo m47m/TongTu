@@ -81,6 +81,7 @@
                android:layout_marginTop="18dp"
                android:layout_marginEnd="10dp"
                android:layout_marginStart="8dp"
+               android:maxLines="2"
                android:text="这是一段音乐.mp4"
                android:textSize="15sp"
                tools:ignore="MissingConstraints,NotSibling" />
@@ -155,6 +156,7 @@
                 android:layout_marginTop="18dp"
                 android:layout_marginEnd="10dp"
                 android:text="宫sir美妙的歌声.mp4"
+                android:maxLines="2"
                 android:textColor="@color/file_format_text_color"
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"

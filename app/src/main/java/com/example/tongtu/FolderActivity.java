@@ -106,7 +106,7 @@ public class FolderActivity extends BaseActivity<PersonMsgView, PersonMsgPre>imp
     }
 
     public void initdata(){
-        folder_list.add(new FolderList("11","dwd","dawd",R.drawable.document_type_new));
+        folder_list.add(new FolderList("test","test","test",R.drawable.document_type_new));
     }
 
     @Override

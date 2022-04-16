@@ -7,6 +7,7 @@ import com.example.tongtu.base.BasePresenter;
 import com.example.tongtu.filelist.FileList;
 import com.example.tongtu.filerecycle.FileRecycle;
 import com.example.tongtu.folderlist.FolderList;
+import com.example.tongtu.utils.TimeTypeutils;
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
@@ -15,6 +16,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,6 +27,7 @@ import okhttp3.Response;
 public class PersonMsgPre extends BasePresenter<PersonMsgView> {
     private PersonMsg personMsg;
     public PersonMsgPre(){this.personMsg = new PersonMsg();}
+    TimeTypeutils timeTypeutils = new TimeTypeutils();
 
     public void get_UserMsg(String token){
         this.personMsg.get_UserMsg(token, new Callback() {
@@ -124,10 +127,11 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
                             folderLists.add(new FolderList(
                                     jsonArray.getJSONObject(i).getString("name"),
                                     jsonArray.getJSONObject(i).getString("description"),
-                                    jsonArray.getJSONObject(i).getJSONObject("device").getString("name"),
+                                    timeTypeutils.toNormal(jsonArray.getJSONObject(i).getString("uploadAt")),
                                     R.drawable.document_type_new
                             ));
                         }
+
 
                         if(getView() != null){
                             getView().get_folder_file_result(folderLists);
@@ -135,7 +139,7 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
                     }
 
 
-                } catch (JSONException e) {
+                } catch (JSONException | ParseException e) {
                     e.printStackTrace();
                 }
             }
