@@ -4,7 +4,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.Scroller;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,32 +23,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collections;
 import java.util.List;
 
-public class FileRecycleAdapter extends RecyclerView.Adapter<FileRecycleAdapter.ViewHolder> implements IItemTouchHelperAdapter {
+public class FileRecycleAdapter extends RecyclerView.Adapter<FileRecycleAdapter.ViewHolder> {
 
     private List<FileRecycle> file_recycle_list;
 
-    @Override
-    public void onItemMove(int fromPosition, int toPosition) {
-        Collections.swap(file_recycle_list, fromPosition, toPosition);
-        notifyItemMoved(fromPosition, toPosition);
-    }
-
-    @Override
-    public void onItemDismiss(int position) {
-        file_recycle_list.remove(position);
-        Log.d("recycleView","测滑："+String.valueOf(position));
-        notifyItemRemoved(position);
-    }
-
-    @Override
-    public void onChildDraw(RecyclerView.ViewHolder viewHolder, float dX, float dY) {
-
-    }
-
-    @Override
-    public View getItemFrontView(RecyclerView.ViewHolder mPreOpened) {
-        return null;
-    }
 
 
     static class ViewHolder extends RecyclerView.ViewHolder{
@@ -71,6 +51,8 @@ public class FileRecycleAdapter extends RecyclerView.Adapter<FileRecycleAdapter.
     public FileRecycleAdapter(List<FileRecycle>file_recycle_list){
         this.file_recycle_list = file_recycle_list;
     }
+
+
     @NonNull
     @NotNull
     @Override
@@ -122,10 +104,29 @@ public class FileRecycleAdapter extends RecyclerView.Adapter<FileRecycleAdapter.
         holder.fileOverdue.setText(file_recycle.getFileoverdue());
         holder.fileSize.setText(file_recycle.getFilesize());
 
+        if(onItemClickListener!=null) {
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onItemClickListener.onItemLongClick(holder.itemView,position);
+                    return false;
+                }
+            });
+        }
+
     }
 
     @Override
     public int getItemCount() {
         return this.file_recycle_list.size();
+    }
+
+    private OnItemClickListener onItemClickListener;
+    public interface OnItemClickListener{
+        void onItemLongClick(View view , int pos);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 }

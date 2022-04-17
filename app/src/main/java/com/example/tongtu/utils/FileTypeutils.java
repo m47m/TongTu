@@ -5,6 +5,7 @@ import android.util.Log;
 import com.example.tongtu.R;
 
 import java.io.File;
+import java.lang.annotation.ElementType;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,12 @@ public class FileTypeutils {
         file_type_maps.put( "application/vnd.ms-excel",TYPE_TEXT);
         file_type_maps.put( "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",TYPE_TEXT);
         file_type_maps.put( "application/x-zip-compressed",TYPE_OTHER);
+
+        file_type_maps.put("OTHER",R.drawable.document_type_new);
+        file_type_maps.put("VEDIO",R.drawable.document_type_avi);
+        file_type_maps.put("TEXT",R.drawable.document_type_txt);
+        file_type_maps.put("IMAGE",R.drawable.document_type_png);
+        file_type_maps.put("AUDIO",R.drawable.document_type_mp3);
     }
 
     public int totype(String file_type){
@@ -47,6 +54,17 @@ public class FileTypeutils {
         }else{
             return default_class;
         }
+    }
+
+    public int getType(String file_type){
+        int default_class = R.drawable.document_type_new;
+        if(file_type_maps.containsKey(file_type)){
+            return file_type_maps.get(file_type);
+        }else {
+            return default_class;
+        }
+
+
     }
 
     // split截取后缀名

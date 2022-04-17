@@ -189,4 +189,19 @@ public class PersonFragment extends FragmentBase<PersonMsgView, PersonMsgPre>imp
 
     }
 
+    @Override
+    public void delete_file_result(String code) {
+
+    }
+
+    @Override
+    public void restore_file_result(String code) {
+
+    }
+
+    @Override
+    public void cpl_delete_file_result(String code) {
+
+    }
+
 }

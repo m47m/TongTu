@@ -19,6 +19,7 @@ import com.example.tongtu.FileDownload;
 import com.example.tongtu.MainActivity;
 import com.example.tongtu.R;
 import com.example.tongtu.filepost.FileAdapter;
+import com.example.tongtu.filerecycle.FileRecycleAdapter;
 import com.example.tongtu.utils.TimeTypeutils;
 
 import org.jetbrains.annotations.NotNull;
@@ -69,8 +70,6 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
             card_file_message_right = (CardView) itemView.findViewById(R.id.card_file_message_right);
             file_source_left = (Group)itemView.findViewById(R.id.file_format_left);
             file_source_right = (Group)itemView.findViewById(R.id.file_format_right);
-
-
         }
     }
 
@@ -91,6 +90,7 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
                 Intent intent = new Intent(context, FileDownload.class);
                 intent.putExtra("file_class",file_list_list.get(holder.getAdapterPosition()).getFile_class());
                 intent.putExtra("file_name",file_list_list.get(holder.getAdapterPosition()).getFile_name());
+                intent.putExtra("file_folder",file_list_list.get(holder.getAdapterPosition()).getFile_folder());
                 context.startActivity(intent);
             }
         });
@@ -120,9 +120,6 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
         } catch (ParseException e) {
             e.printStackTrace();
         }
-
-
-
         if(fileList.getFile_source().equals("1")){
             holder.file_source_left.setVisibility(View.INVISIBLE);
             holder.file_source_right.setVisibility(View.VISIBLE);
@@ -142,6 +139,24 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
             }
         }
 
+        if(onItemClickListener!=null) {
+            holder.card_file_message_right.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onItemClickListener.onItemLongClick(holder.itemView,position);
+                    return false;
+                }
+            });
+
+            holder.card_file_message_left.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onItemClickListener.onItemLongClick(holder.itemView,position);
+                    return false;
+                }
+            });
+        }
+
     }
 
 
@@ -149,5 +164,14 @@ public class FileListAdapter extends RecyclerView.Adapter<FileListAdapter.ViewHo
     @Override
     public int getItemCount() {
         return this.file_list_list.size();
+    }
+
+    private FileListAdapter.OnItemClickListener onItemClickListener;
+    public interface OnItemClickListener{
+        void onItemLongClick(View view , int pos);
+    }
+
+    public void setOnItemClickListener(FileListAdapter.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
     }
 }

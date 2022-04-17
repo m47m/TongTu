@@ -7,6 +7,7 @@ import com.example.tongtu.base.BasePresenter;
 import com.example.tongtu.filelist.FileList;
 import com.example.tongtu.filerecycle.FileRecycle;
 import com.example.tongtu.folderlist.FolderList;
+import com.example.tongtu.utils.FileTypeutils;
 import com.example.tongtu.utils.TimeTypeutils;
 
 import org.jetbrains.annotations.NotNull;
@@ -28,6 +29,7 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
     private PersonMsg personMsg;
     public PersonMsgPre(){this.personMsg = new PersonMsg();}
     TimeTypeutils timeTypeutils = new TimeTypeutils();
+    FileTypeutils fileTypeutils = new FileTypeutils();
 
     public void get_UserMsg(String token){
         this.personMsg.get_UserMsg(token, new Callback() {
@@ -89,11 +91,13 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
                        JSONArray jsonArray = jsonObject.getJSONArray("data");
                        for(int i =0;i<jsonArray.length();i++){
                            fileLists.add(new FileList(
+                                   jsonArray.getJSONObject(i).getString("id"),
                                    jsonArray.getJSONObject(i).getString("name"),
-                                   R.drawable.document_type_new,
+                                   fileTypeutils.getType(jsonArray.getJSONObject(i).getString("fileType")),
                                    jsonArray.getJSONObject(i).getString("size"),
                                    jsonArray.getJSONObject(i).getString("uploadAt"),
-                                   jsonArray.getJSONObject(i).getJSONObject("device").getString("id")
+                                   jsonArray.getJSONObject(i).getJSONObject("device").getString("id"),
+                                   jsonArray.getJSONObject(i).getString("folder")
                            ));
                        }
 
@@ -125,10 +129,12 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
                         for (int i = 0;i<jsonArray.length();i++){
                             folderLists.add(new FolderList(
+                                    jsonArray.getJSONObject(i).getString("id"),
                                     jsonArray.getJSONObject(i).getString("name"),
                                     jsonArray.getJSONObject(i).getString("description"),
                                     timeTypeutils.toNormal(jsonArray.getJSONObject(i).getString("uploadAt")),
-                                    R.drawable.document_type_new
+                                    fileTypeutils.getType(jsonArray.getJSONObject(i).getString("fileType")),
+                                    jsonArray.getJSONObject(i).getString("folder")
                             ));
                         }
 
@@ -164,11 +170,13 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
                         JSONArray jsonArray = jsonObject.getJSONArray("data");
                         for(int i =0;i<jsonArray.length();i++){
                             fileLists.add(new FileList(
+                                    jsonArray.getJSONObject(i).getString("id"),
                                     jsonArray.getJSONObject(i).getString("name"),
-                                    R.drawable.document_type_new,
+                                    fileTypeutils.getType(jsonArray.getJSONObject(i).getString("fileType")),
                                     jsonArray.getJSONObject(i).getString("size"),
                                     jsonArray.getJSONObject(i).getString("uploadAt"),
-                                    jsonArray.getJSONObject(i).getJSONObject("device").getString("id")
+                                    jsonArray.getJSONObject(i).getJSONObject("device").getString("id"),
+                                    jsonArray.getJSONObject(i).getString("folder")
                             ));
                         }
 
@@ -214,7 +222,7 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
                                 jsonArray.getJSONObject(i).getString("name"),
                                 jsonArray.getJSONObject(i).getString("fileType"),
                                 jsonArray.getJSONObject(i).getString("size"),
-                                R.drawable.document_type_new
+                                    fileTypeutils.getType(jsonArray.getJSONObject(i).getString("fileType"))
                          ));
                       }
 
@@ -256,7 +264,7 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
                                     jsonArray.getJSONObject(i).getString("name"),
                                     jsonArray.getJSONObject(i).getString("fileType"),
                                     jsonArray.getJSONObject(i).getString("size"),
-                                    R.drawable.document_type_new
+                                    fileTypeutils.getType(jsonArray.getJSONObject(i).getString("fileType"))
                             ));
                         }
 
@@ -280,5 +288,66 @@ public class PersonMsgPre extends BasePresenter<PersonMsgView> {
             }
         });
     }
+
+    public void  DeleteFile(String fileID,String token){
+        this.personMsg.DeleteFile(fileID, token, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(response.body().string());
+                    String code = jsonObject.getString("code");
+                    List<FileRecycle> fileRecycles = new ArrayList<>();
+                    if(code.equals("0")) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+
+                        if(getView() != null){
+                            getView().delete_file_result(code);
+                        }
+                    }else if(code.equals("1")){
+                        if(getView() != null){
+                            getView().delete_file_result(code);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+    }
+
+    public void RestoreFile(String fileID,String token){
+        this.personMsg.RestoreFile(fileID, token, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+            }
+        });
+    }
+
+    public void CPDeleteFile(String fileID,String token){
+        this.personMsg.CPDeleteFile(fileID, token, new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+
+            }
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+
+            }
+        });
+    }
+
 }
 

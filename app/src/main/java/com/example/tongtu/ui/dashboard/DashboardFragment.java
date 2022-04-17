@@ -8,11 +8,15 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -118,11 +122,35 @@ public class DashboardFragment extends FragmentBase<PersonMsgView, PersonMsgPre>
 //        recyclerView.setAdapter(adapter);
 //        recyclerView.scrollToPosition(adapter.getItemCount()-1);
 
+        adapter.setOnItemClickListener(new FileRecycleAdapter.OnItemClickListener() {
+            @Override
+            public void onItemLongClick(View view, final int pos) {
+                PopupMenu popupMenu = new PopupMenu(view.getContext(),view);
+                popupMenu.getMenuInflater().inflate(R.menu.recycle_item_menu,popupMenu.getMenu());
+
+                //弹出式菜单的菜单项点击事件
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.restoreItem:
+                                Toast.makeText(view.getContext(), "还原", Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.removeItem:
+                                Toast.makeText(view.getContext(), "删除", Toast.LENGTH_SHORT).show();
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.setGravity(Gravity.END);
+                popupMenu.show();
+            }
+        });
+
+
         loadMoreAdapter = new LoadMoreAdapter(adapter);
         recyclerView.setAdapter(loadMoreAdapter);
-
-        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new MyItemTouchHelperCallback(adapter));
-        itemTouchHelper.attachToRecyclerView(recyclerView);
 
         recyclerView.addOnScrollListener(new EndlessRecyclerOnScrollListener() {
             @Override
@@ -140,6 +168,8 @@ public class DashboardFragment extends FragmentBase<PersonMsgView, PersonMsgPre>
                 }
             }
         });
+
+
 
 
         pref = view.getContext().getSharedPreferences("login_message",MODE_PRIVATE);
@@ -215,5 +245,20 @@ public class DashboardFragment extends FragmentBase<PersonMsgView, PersonMsgPre>
             message.obj = fileRecycleList;
             handler.sendMessage(message);
         }
+    }
+
+    @Override
+    public void delete_file_result(String code) {
+
+    }
+
+    @Override
+    public void restore_file_result(String code) {
+
+    }
+
+    @Override
+    public void cpl_delete_file_result(String code) {
+
     }
 }

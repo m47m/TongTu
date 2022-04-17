@@ -17,6 +17,7 @@ import com.example.tongtu.FolderActivity;
 import com.example.tongtu.R;
 import com.example.tongtu.filepost.FileAdapter;
 import com.example.tongtu.filepost.FilePost;
+import com.example.tongtu.filerecycle.FileRecycleAdapter;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -62,6 +63,8 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Vi
                // Toast.makeText(holder.itemView.getContext(),"点击了"+folder_list.get(holder.getAdapterPosition()).getName(), Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(context, FileDownload.class);
                 intent.putExtra("file_name",folder_list.get(holder.getAdapterPosition()).getName());
+                intent.putExtra("file_folder",folder_list.get(holder.getAdapterPosition()).getFile_folder());
+                intent.putExtra("file_class",folder_list.get(holder.getAdapterPosition()).getImageId());
                 context.startActivity(intent);
             }
         });
@@ -79,6 +82,17 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Vi
         holder.fileDeviceNumber.setText(folderList.getFile_device_number());
         holder.fileTime.setText(folderList.getFile_time());
 
+
+        if(onItemClickListener!=null) {
+            holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    onItemClickListener.onItemLongClick(holder.itemView,position);
+                    return false;
+                }
+            });
+        }
+
     }
 
     @Override
@@ -86,4 +100,12 @@ public class FolderListAdapter extends RecyclerView.Adapter<FolderListAdapter.Vi
         return this.folder_list.size();
     }
 
+    private FolderListAdapter.OnItemClickListener onItemClickListener;
+    public interface OnItemClickListener{
+        void onItemLongClick(View view , int pos);
+    }
+
+    public void setOnItemClickListener(FolderListAdapter.OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 }

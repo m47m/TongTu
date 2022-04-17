@@ -21,8 +21,9 @@
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 
         <!-- Customize your theme here. -->
-
     </style>
+
+
 
     <style name="style_divide_line">
         <item name="android:layout_height">1dp</item>
@@ -31,10 +32,13 @@
         <item name="android:layout_marginLeft">10dp</item>
         <item name="android:layout_marginRight">10dp</item>
     </style>
+
     <style name="Theme.Tongtu.FullScreen">  //style名字
         <item name="windowNoTitle">true</item>  //不显示标题
         <item name="android:windowFullscreen">true</item>  //全屏
     </style>
+
+
 
 
 </resources>

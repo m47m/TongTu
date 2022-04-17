@@ -36,7 +36,7 @@ public class PersonMsg {
     }
 
     public void get_file(String token,Callback callback){
-        String URL_get_File = URL_api +"/oss/file/list?size=6&page=0";
+        String URL_get_File = URL_api +"/oss/file/list?size=7&page=0";
         Request request = new Request.Builder()
                 .url(URL_get_File)
                 .get()
@@ -56,7 +56,7 @@ public class PersonMsg {
     }
 
     public void LoadMoreFile(int page ,String token,Callback callback){
-        String URL_get_File = URL_api +"/oss/file/list?size=6&page="+String.valueOf(page);
+        String URL_get_File = URL_api +"/oss/file/list?size=7&page="+String.valueOf(page);
         Request request = new Request.Builder()
                 .url(URL_get_File)
                 .get()
@@ -86,4 +86,35 @@ public class PersonMsg {
                 .build();
         client.newCall(request).enqueue(callback);
     }
+
+    public void DeleteFile(String fileID,String token, Callback callback){
+        String URL_DELETE_FILE = URL_api+"";
+        Request request = new Request.Builder()
+                .url(URL_DELETE_FILE)
+                .get()
+                .addHeader("token",token)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void RestoreFile(String fileID,String token, Callback callback){
+        String URL_RESTORE_FILE = URL_api+"";
+        Request request = new Request.Builder()
+                .url(URL_RESTORE_FILE)
+                .get()
+                .addHeader("token",token)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
+    public void CPDeleteFile(String fileID,String token, Callback callback){
+        String URL_CPDELETE_FILE = URL_api+"";
+        Request request = new Request.Builder()
+                .url(URL_CPDELETE_FILE)
+                .get()
+                .addHeader("token",token)
+                .build();
+        client.newCall(request).enqueue(callback);
+    }
+
 }

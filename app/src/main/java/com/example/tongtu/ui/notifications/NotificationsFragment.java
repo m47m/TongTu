@@ -7,18 +7,24 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.tongtu.FolderActivity;
 import com.example.tongtu.R;
 //      import com.example.tongtu.databinding.FragmentNBinding;
 import com.example.tongtu.base.FragmentBase;
 import com.example.tongtu.filelist.FileList;
 import com.example.tongtu.filelist.FileListAdapter;
 import com.example.tongtu.filerecycle.FileRecycle;
+import com.example.tongtu.filerecycle.FileRecycleAdapter;
 import com.example.tongtu.utils.LoadMoreAdapter;
 import com.example.tongtu.folderlist.FolderList;
 import com.example.tongtu.mvp.PersonMsgPre;
@@ -47,6 +53,8 @@ public class NotificationsFragment extends FragmentBase<PersonMsgView, PersonMsg
     private final int LOADSTART = 1;
     private final int LOADMORE = 2;
     private final int LOADEND = 3;
+    private final int DELETE_FILE_SUCCESS = 4;
+    private int DeleteFilePos = 0;
 
     @SuppressLint("HandlerLeak")
     Handler handler;
@@ -74,6 +82,9 @@ public class NotificationsFragment extends FragmentBase<PersonMsgView, PersonMsg
                     case LOADEND:
                         EndofPage = true;
                         loadMoreAdapter.setLoadState(loadMoreAdapter.LOADING_END);
+                    case DELETE_FILE_SUCCESS:
+                        file_list_list.remove(DeleteFilePos);
+                        Toast.makeText(getContext(), "文件删除至回收站", Toast.LENGTH_SHORT).show();
                     default:
                         break;
                 }
@@ -116,6 +127,32 @@ public class NotificationsFragment extends FragmentBase<PersonMsgView, PersonMsg
                 else{
                     loadMoreAdapter.setLoadState(loadMoreAdapter.LOADING_END);
                 }
+            }
+        });
+
+        adapter.setOnItemClickListener(new FileListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemLongClick(View view, final int pos) {
+                PopupMenu popupMenu = new PopupMenu(view.getContext(),view);
+                popupMenu.getMenuInflater().inflate(R.menu.file_item_menu,popupMenu.getMenu());
+
+                //弹出式菜单的菜单项点击事件
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.restoreItem:
+                                Toast.makeText(view.getContext(), "还原", Toast.LENGTH_SHORT).show();
+                                break;
+                            case R.id.removeItem:
+                                //Toast.makeText(view.getContext(), "删除", Toast.LENGTH_SHORT).show();
+                                DeleteFilePos = pos;
+                                delete_file_result("0");
+                        }
+                        return false;
+                    }
+                });
+                popupMenu.show();
             }
         });
 
@@ -190,6 +227,23 @@ public class NotificationsFragment extends FragmentBase<PersonMsgView, PersonMsg
 
     @Override
     public void loadmore_bin_file_result(String code, List<FileRecycle> fileRecycleList) {
+
+    }
+
+    @Override
+    public void delete_file_result(String code) {
+        Message message = new Message();
+        message.what = DELETE_FILE_SUCCESS;
+        handler.sendMessage(message);
+    }
+
+    @Override
+    public void restore_file_result(String code) {
+
+    }
+
+    @Override
+    public void cpl_delete_file_result(String code) {
 
     }
 }

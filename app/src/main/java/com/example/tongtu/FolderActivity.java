@@ -12,14 +12,19 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tongtu.base.BaseActivity;
 import com.example.tongtu.filelist.FileList;
 import com.example.tongtu.filepost.FileAdapter;
 import com.example.tongtu.filepost.FilePost;
 import com.example.tongtu.filerecycle.FileRecycle;
+import com.example.tongtu.filerecycle.FileRecycleAdapter;
 import com.example.tongtu.folderlist.FolderList;
 import com.example.tongtu.folderlist.FolderListAdapter;
 import com.example.tongtu.mvp.PersonMsg;
@@ -41,7 +46,9 @@ public class FolderActivity extends BaseActivity<PersonMsgView, PersonMsgPre>imp
     private String token;
     public FolderListAdapter adapter;
     private List<FolderList> folder_list = new ArrayList<>();
+    private final int DELETE_FILE_SUCCESS = 4;
 
+    private  int DeleteFilePos = 0;
 
     @SuppressLint("HandlerLeak")
     Handler handler;
@@ -58,6 +65,10 @@ public class FolderActivity extends BaseActivity<PersonMsgView, PersonMsgPre>imp
                         for(int i = 0;i<temp.size();i++){
                             folder_list.add(temp.get(i));
                         }
+                        break;
+                    case DELETE_FILE_SUCCESS:
+                        folder_list.remove(DeleteFilePos);
+                        Toast.makeText(FolderActivity.this, "文件删除至回收站", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 adapter.notifyDataSetChanged();
@@ -89,6 +100,36 @@ public class FolderActivity extends BaseActivity<PersonMsgView, PersonMsgPre>imp
         adapter = new FolderListAdapter(folder_list,this);
         recyclerView.setAdapter(adapter);
 
+        adapter.setOnItemClickListener(new FolderListAdapter.OnItemClickListener() {
+            @Override
+            public void onItemLongClick(View view, final int pos) {
+                PopupMenu popupMenu = new PopupMenu(view.getContext(),view);
+                popupMenu.getMenuInflater().inflate(R.menu.file_item_menu,popupMenu.getMenu());
+
+                //弹出式菜单的菜单项点击事件
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.restoreItem:
+
+                                break;
+                            case R.id.removeItem:
+                                DeleteFilePos = pos;
+                               //Toast.makeText(view.getContext(), "删除"+folder_list.get(pos).getFile_id(), Toast.LENGTH_SHORT).show();
+                              //getPresenter().DeleteFile(folder_list.get(pos).getFile_id(),token);
+                              //delete_file_result("0");
+                        }
+                        return false;
+                    }
+                });
+
+                popupMenu.setGravity(Gravity.END);
+                popupMenu.show();
+            }
+        });
+
         if(getPresenter() != null){
             getPresenter().get_FolderFile(token,folder_name);
         }
@@ -106,7 +147,7 @@ public class FolderActivity extends BaseActivity<PersonMsgView, PersonMsgPre>imp
     }
 
     public void initdata(){
-        folder_list.add(new FolderList("test","test","test",R.drawable.document_type_new));
+        folder_list.add(new FolderList("11","test","test","test",R.drawable.document_type_new,"test"));
     }
 
     @Override
@@ -144,6 +185,23 @@ public class FolderActivity extends BaseActivity<PersonMsgView, PersonMsgPre>imp
 
     @Override
     public void loadmore_bin_file_result(String code, List<FileRecycle> fileRecycleList) {
+
+    }
+
+    @Override
+    public void delete_file_result(String code) {
+        Message message = new Message();
+        message.what = DELETE_FILE_SUCCESS;
+        handler.sendMessage(message);
+    }
+
+    @Override
+    public void restore_file_result(String code) {
+
+    }
+
+    @Override
+    public void cpl_delete_file_result(String code) {
 
     }
 

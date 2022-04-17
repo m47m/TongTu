@@ -34,6 +34,7 @@ import com.alibaba.sdk.android.oss.model.GetObjectResult;
 import com.example.tongtu.base.BaseActivity;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -43,6 +44,7 @@ import static android.os.Environment.getExternalStoragePublicDirectory;
 public class FileDownload extends AppCompatActivity {
     private Intent intent;
     private String file_name;
+    private String file_folder;
     private String file_size_cloud;
     private String file_time;
 
@@ -85,6 +87,7 @@ public class FileDownload extends AppCompatActivity {
         intent = this.getIntent();
 
         file_name = intent.getStringExtra("file_name");
+        file_folder = intent.getStringExtra("file_folder");
 
         img_file_class = (ImageView)findViewById(R.id.img_file_class);
         text_file_name = (TextView)findViewById(R.id.text_file_name);
@@ -118,7 +121,7 @@ public class FileDownload extends AppCompatActivity {
 
         OSS mClient = new OSSClient(getApplicationContext(), endpoint, credentialProvider);
 
-        GetObjectRequest get = new GetObjectRequest("examplesbucket", "only/"+this.file_name);
+        GetObjectRequest get = new GetObjectRequest("examplesbucket", this.file_folder+"/"+this.file_name);
 
         getCallback = new FileGetCallback();
 

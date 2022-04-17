@@ -18,4 +18,7 @@ public interface PersonMsgView extends BaseView {
     void loadmore_folder_file_reuslt(String code,List<FileList> fileLists);
     void get_bin_file_result(List<FileRecycle> fileRecycleList);
     void loadmore_bin_file_result(String code,List<FileRecycle> fileRecycleList);
+    void delete_file_result(String code);
+    void restore_file_result(String code);
+    void cpl_delete_file_result(String code);
 }

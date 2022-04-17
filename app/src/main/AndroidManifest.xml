@@ -25,7 +25,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Tongtu"
         android:usesCleartextTraffic="true">
-        <activity android:name=".FolderActivity"></activity>
+        <activity android:name=".FolderActivity"/>
         <activity android:name=".SettingActivity" />
         <activity android:name=".FileDownload" />
         <activity android:name=".SelectClassActivity" />
@@ -55,6 +55,7 @@
         <activity
             android:name=".MainActivity"
             android:windowSoftInputMode="adjustPan|stateHidden" />
+
         <activity android:name=".RegisterActivity" />
         <activity android:name=".LoginActivity" />
         <activity

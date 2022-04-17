@@ -6,11 +6,13 @@ public class FilePost {
     private int imageId;
     private String file_time;
 
+
     public FilePost(String name ,String number,String time,int imageId){
         this.file_name = name;
         this.imageId = imageId;
         this.file_device_number = number;
         this.file_time = time;
+
     }
 
     public FilePost() {
@@ -28,5 +30,6 @@ public class FilePost {
     public String getFile_time(){
         return this.file_time;
     }
+
 
 }

@@ -180,4 +180,19 @@ public class SelectClassActivity extends BaseActivity<PersonMsgView, PersonMsgPr
 
     }
 
+    @Override
+    public void delete_file_result(String code) {
+
+    }
+
+    @Override
+    public void restore_file_result(String code) {
+
+    }
+
+    @Override
+    public void cpl_delete_file_result(String code) {
+
+    }
+
 }
